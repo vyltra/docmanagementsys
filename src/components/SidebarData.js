@@ -19,4 +19,9 @@ export const SidebarData = [
         icon: <FolderSharedIcon />,
         link: "/shareddocuments"
     },
+    {
+        title: "Upload New File",
+        icon: <FolderSharedIcon />,
+
+    }
 ]
