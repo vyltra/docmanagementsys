@@ -6,21 +6,9 @@ import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import Dropzone from './Dropzone'
 
 
-
-
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-});
 
 
 
@@ -60,14 +48,9 @@ class Upload extends Component{
         return (
             <div className="UploadContainer">
                 <div className="Upload">
-                    <div className="UploadBox">
-                        <UploadFileIcon className="UploadFileIcon"/>
-                        <p>Drag File here to Upload</p>
-                        <Button component="label" variant="contained">
-                            Select File
-                            <VisuallyHiddenInput type="file" />
-                        </Button>
-                    </div>
+
+                    <Dropzone />
+
                     <div className="UploadParameters">
 
                         <TextField id="filled-basic" label="Document Name" variant="filled"
