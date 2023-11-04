@@ -20,6 +20,7 @@ class Upload extends Component{
             isOpen: true,
             selectedTags: [],
             selectedUsers: [],
+            selectedFile: null,
         };
 
     }
@@ -34,9 +35,47 @@ class Upload extends Component{
         this.setState({ selectedUsers: values });
     }
 
+    handleFileSelect = (file) => {
+        this.setState({ selectedFile: file})
+    }
+
     handleSubmit = () => { // If you're using this syntax, don't forget to bind it in the constructor or use an arrow function as shown here.
         console.log("Selected Tags:", this.state.selectedTags);
         console.log("Selected Users:", this.state.selectedUsers);
+        console.log("Selected File", this.state.selectedFile)
+
+        const reqData = {
+            title: 'My PDF Document',
+            author: 'Author Name',
+            content: 'Base64EncodedStringOfThePDF',
+            tags: ['tag1', 'tag2'],
+        };
+
+
+        // Use fetch to send a POST request
+        fetch('http://localhost:3001/xxx', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reqData), // converts state to json and sends in response body
+        })
+            .then(response => { // handle response
+                // Check if the response is successful
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+
+
     }
 
 
@@ -49,7 +88,7 @@ class Upload extends Component{
             <div className="UploadContainer">
                 <div className="Upload">
 
-                    <Dropzone />
+                    <Dropzone onDrop={this.handleFileSelect}/>
 
                     <div className="UploadParameters">
 
@@ -150,7 +189,7 @@ class Upload extends Component{
                     <div className="UploadParameters">
                         <Autocomplete
                             multiple
-                            id="tags-filled"
+                            id="users-filled"
                             options={top100Films.map((option) => option.title)}
                             freeSolo
                             onChange={this.handleUsersChange}

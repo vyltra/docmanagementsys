@@ -1,41 +1,40 @@
-import React, {Component} from "react";
-import '../App.css'
+import React, { Component } from "react";
+import '../App.css';
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Button from "@mui/material/Button";
-import {styled} from "@mui/material/styles";
+import { useDropzone } from 'react-dropzone';
 
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-});
+const StyledDropzone = (props) => {
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop: props.onDrop,
+         // prevent the dropzone from opening the file dialog when clicked
+        noKeyboard: true // prevent default keyboard behavior
+    });
+
+    return (
+        <div {...getRootProps({ className: 'Dropzone' })}>
+            <input {...getInputProps()} />
+            {props.children}
+        </div>
+    );
+};
 
 class Dropzone extends Component {
 
+    handleDrop = (acceptedFile) => {
+        console.log(acceptedFile);
+        this.props.onDrop(acceptedFile);
+    };
 
-
-    render(){
+    render() {
         return (
-                <div className="UploadBox">
-                    <UploadFileIcon className="UploadFileIcon"/>
-                    <p>Drag File here to Upload</p>
-                    <Button component="label" variant="contained">
-                        Select File
-                        <VisuallyHiddenInput type="file" />
-                    </Button>
-                </div>
-        )
+                <StyledDropzone onDrop={this.handleDrop}>
+                        <UploadFileIcon className="UploadFileIcon" />
+                        <p>Drag file here to upload<br/><br/>
+                        or click this field to select</p>
+                </StyledDropzone>
+        );
     }
-
-
 }
 
-
-
-export default Dropzone
+export default Dropzone;

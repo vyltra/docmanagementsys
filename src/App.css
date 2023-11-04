@@ -123,27 +123,15 @@ body {
   box-sizing: border-box; /* Padding included in the width and height */
 }
 
-.UploadBox {
-  width: 80%; /* Width as previously defined */
-  height: 30vh; /* Height as previously defined */
-  border: 2px solid white;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  color: white;
-  margin-bottom: 1em; /* Add margin to separate from the next div */
-}
 
 .UploadFileIcon {
   transform: scale(5);
   margin-bottom: 1em; /* Adjust margin to create space between icon and text */
 }
 
-.UploadBox p {
+.Dropzone p {
   text-align: center;
+  margin-top: 5%;
   /* Remove the margin-top if you want the text to be closer to the icon */
 }
 
@@ -157,6 +145,19 @@ body {
   color: white;
 }
 
+.Dropzone {
+  width: 80%; /* Width as previously defined */
+  height: 30vh; /* Height as previously defined */
+  border: 2px solid white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: white;
+  margin-bottom: 1em;
+}
 
 .red {
   background-color: red;

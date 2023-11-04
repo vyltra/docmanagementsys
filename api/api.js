@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 3001; // Choose a port number
-const mysql = require('mysql')
+const mysql = require('mysql2/promise')
 const cors = require('cors');
 
 // use cors middleware to enable cross-origin requests
@@ -9,13 +9,16 @@ app.use(cors());
 
 
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '1234',
-    database: 'docview'
+    database: 'docview',
+    waitForConnections: true,
+    connectionLimit: 5,
+    queueLimit: 0
 })
-db.connect()
+
 
 
 // Middleware to parse JSON data
@@ -54,17 +57,61 @@ app.get('/items/:id', (req, res) => {
 
 
 
-app.get('/getAllDocuments', (req, res) => {
-    db.query(
-        'SELECT docview.documents.id, docview.documents.document, docview.documents.document_name\n' +
-        'FROM docview.documents\n' +
-        'WHERE docview.documents.owner = 1'
-    , (err, rows, fields) => {
-            if (err) throw err
+app.get('/getAllDocuments', async (req, res) => {
+
+    let conn;
+
+    try {
+        // get a connection from the pool and begin a transaction
+        // using transactions for data integrity
+        conn = await db.getConnection();
+        // await conn.beginTransaction()
+        const [rows, fields] = await conn.query(
+            'SELECT docview.documents.id, docview.documents.document, docview.documents.document_name\n' +
+            'FROM docview.documents\n' +
+            'WHERE docview.documents.owner = 1'
+        )
+
+        res.json(rows);
+
+    } catch (err) {
+        // error logging + wait for rollback in case of query failure
+        console.error('An Error occured trying to execute a Database query')
+        //await conn.rollback();
+        res.status(500).send('Error getting documents')
+    } finally {
+        if (conn) conn.release(); // release the connection back to the pool
+
+    }
+})
 
 
-            res.json(rows)
-        })
+app.post('/upload', async (req, res) => {
+
+    let conn;
+
+    try {
+        // get a connection from the pool and begin a transaction
+        // using transactions for data integrity
+        conn = await db.getConnection();
+        await conn.beginTransaction()
+
+        const [rows, fields] = await conn.query(
+            'SELECT docview.documents.id, docview.documents.document, docview.documents.document_name\n' +
+            'FROM docview.documents\n' +
+            'WHERE docview.documents.owner = 1'
+        )
+
+        res.json(rows);
+
+    } catch (err) {
+        // error logging + wait for rollback in case of query failure
+        console.error('An Error occured trying to execute a Database query')
+        await conn.rollback();
+        res.status(500).send('Error getting documents')
+    } finally {
+        if (conn) conn.release();
+    }
 })
 
 
