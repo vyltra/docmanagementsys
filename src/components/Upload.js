@@ -24,6 +24,7 @@ class Upload extends Component{
             userInfo: [],
             userTags: [],
             imagePreview: [],
+            customName: null,
         };
 
     }
@@ -48,6 +49,11 @@ class Upload extends Component{
         this.setState({ selectedTags: values });
     }
 
+    handleCustomNameChange = (event) => {
+        this.setState({ customName: event.target.value });
+        console.log(this.state.customName);
+    }
+
     handleUsersChange = (event, values) => {
         // Assuming 'values' is an array of user names and 'this.state.userInfo' is an array of objects with 'id' and 'user_name'
         const selectedUserIds = values.map(userName => {
@@ -70,9 +76,6 @@ class Upload extends Component{
     }
 
     handleSubmit = () => { // If you're using this syntax, don't forget to bind it in the constructor or use an arrow function as shown here.
-        console.log("Selected Tags:", this.state.selectedTags);
-        console.log("Selected Users:", this.state.selectedUsers);
-        console.log("Selected File", this.state.selectedFile)
 
         if (this.state.selectedFile) {
 
@@ -90,6 +93,7 @@ class Upload extends Component{
                     tags: this.state.selectedTags, // assuming you want the tag names
                     users: this.state.selectedUsers, // assuming you want the user names
                     image: this.state.imagePreview,
+                    customName: this.state.customName,
                 };
 
                 // Use fetch to send a POST request
@@ -127,7 +131,6 @@ class Upload extends Component{
 
 
     render() {
-        console.log(this.state.userInfo)
         const {isOpen} = this.state;
         return (
             <div className="UploadContainer">
@@ -138,7 +141,7 @@ class Upload extends Component{
 
                     <div className="UploadParameters">
 
-                        <TextField id="filled-basic" label="Document Name" variant="filled"
+                        <TextField id="filled-basic" label="Document Name" variant="filled" onChange={this.handleCustomNameChange}
                                    sx={{
                                        '& .MuiInputBase-input': {
                                            color: 'white', // Text color

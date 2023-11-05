@@ -34,18 +34,30 @@ app.get('/getAllDocuments', async (req, res) => {
 
     let conn;
 
+    let ownerId = 1;
+
     try {
         // get a connection from the pool and begin a transaction
         // using transactions for data integrity
         conn = await db.getConnection();
         // await conn.beginTransaction()
         const [rows, fields] = await conn.query(
-            'SELECT docview.documents.id, docview.documents.document, docview.documents.document_name\n' +
-            'FROM docview.documents\n' +
-            'WHERE docview.documents.owner = 1'
-        )
+            'SELECT docview.documents.id, docview.documents.document, docview.documents.document_name, docview.documents.image, docview.documents.custom_name ' +
+            'FROM docview.documents ' +
+            'WHERE docview.documents.owner = ?',
+            [ownerId] // This should be the variable holding the owner's ID
+        );
 
-        res.json(rows);
+// Convert each image Buffer to a base64 string
+        const modifiedRows = rows.map(row => {
+            if (row.image) {
+                // Assuming 'image' is a Buffer containing the binary image data
+                row.image = row.image.toString('utf-8');
+            }
+            return row;
+        });
+
+        res.json(modifiedRows);
 
     } catch (err) {
         // error logging + wait for rollback in case of query failure
@@ -57,6 +69,46 @@ app.get('/getAllDocuments', async (req, res) => {
 
     }
 })
+
+app.post('/getDocument', async (req, res) => {
+
+    let conn;
+
+    const { documentId } = req.body;
+
+    try {
+        // get a connection from the pool and begin a transaction
+        // using transactions for data integrity
+        conn = await db.getConnection();
+        // await conn.beginTransaction()
+        const [rows, fields] = await conn.query(
+            'SELECT docview.documents.document ' +
+            'FROM docview.documents ' +
+            'WHERE docview.documents.id = ?',
+            [documentId] // This should be the variable holding the owner's ID
+        );
+
+// Convert each image Buffer to a base64 string
+        const modifiedRows = rows.map(row => {
+            if (row.document) {
+                // Assuming 'image' is a Buffer containing the binary image data
+                row.document = row.document.toString('utf-8');
+            }
+            return row;
+        });
+        res.json(modifiedRows);
+
+    } catch (err) {
+        // error logging + wait for rollback in case of query failure
+        console.error('An Error occured trying to execute a Database query')
+        //await conn.rollback();
+        res.status(500).send('Error getting documents')
+    } finally {
+        if (conn) conn.release(); // release the connection back to the pool
+
+    }
+})
+
 
 app.get('/getAllUsers', async (req, res) => {
 
@@ -119,12 +171,9 @@ app.post('/upload', async (req, res) => {
 
     try {
 
-        const { owner, document, document_name, tags, users, image } = req.body;
+        const { owner, document, document_name, tags, users, image, custom_name } = req.body;
 
-        console.log(owner)
-        console.log(document_name)
-        console.log(tags)
-        console.log(users)
+
         //console.log(document)
 
         //validation code tbd
@@ -136,8 +185,8 @@ app.post('/upload', async (req, res) => {
 
         // Insert document
         const [docResult] = await conn.execute(
-            'INSERT INTO docview.documents (owner, document, document_name, image) VALUES (?, ?, ?, ?)',
-            [owner, document, document_name, image]
+            'INSERT INTO docview.documents (owner, document, document_name, image, custom_name) VALUES (?, ?, ?, ?)',
+            [owner, document, document_name, image, custom_name]
         );
         const lastDocumentId = docResult.insertId;
 
@@ -190,6 +239,7 @@ app.post('/upload', async (req, res) => {
         if (conn) conn.release();
     }
 })
+
 
 
 

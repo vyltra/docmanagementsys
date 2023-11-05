@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import dummy from '../assets/dummy.png'
-
+import PDFViewer from "./PDFViewer";
 
 
 const Item = styled(Paper)(({ theme  }) => ({
@@ -15,6 +15,23 @@ const Item = styled(Paper)(({ theme  }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
+
+
+function Base64Image({ base64 }) {
+    if (!base64) {
+        return <p>No image provided</p>;
+    }
+
+    const src = `data:image/png;base64,${base64}`;
+    return (
+        <img
+            src={src}
+            alt="Base64 Encoded"
+            onError={() => console.error("Error loading base64 image")}
+        />
+    );
+}
+
 
 
 
@@ -27,8 +44,28 @@ class DocView extends Component {
 
         this.state = {
             items: [],
+            showPDFViewer: false,
+            selectedPDF: null,
         };
     }
+
+    openPDFViewer = (pdf) => {
+        this.setState({
+            showPDFViewer: true,
+            selectedPDF: pdf,
+        });
+    };
+
+    closePDFViewer = () => {
+        this.setState({
+            showPDFViewer: false,
+            selectedPDF: null,
+        });
+    };
+
+    handleDocumentClick = (index) => {
+        this.openPDFViewer(index);
+    };
 
     componentDidMount() {
         fetch('http://localhost:3001/getAllDocuments')
@@ -39,24 +76,34 @@ class DocView extends Component {
 
     render() {
         const { items } = this.state;
-
-        return (
-            <div className="DocView">
-                <Box sx={{ flexGrow: 1 }}>
-                    <Grid container spacing={3}>
-                        {items.map((item, index) => (
-                            <Grid className="GridItem" key={index} lg={4}>
-                                <div className="Item">
-                                    <img className="ItemImage" src={dummy} alt="Dummy" /> <br />
-                                    {`${item["document_name"]}`} <br />
-                                </div>
-                                <div className="ItemFooter">Footer</div>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Box>
-            </div>
-        );
+        if (this.state.showPDFViewer) {
+            return(
+                <PDFViewer
+                    selectedPDF={this.state.selectedPDF}
+                    onClose={this.closePDFViewer}
+                />
+            )
+        } else {
+            return (
+                <div className="DocView">
+                    <Box sx={{flexGrow: 1}}>
+                        <Grid container spacing={3}>
+                            {items.map((item, index) => (
+                                <Grid className="GridItem" key={index} lg={4} onClick={() => this.handleDocumentClick(item.id)}>
+                                    <div className="Item">
+                                        <br/>
+                                        <img src={item["image"]}/> <br/>
+                                        <div className="docName">{`${item["document_name"]}`}</div>
+                                        <br/>
+                                    </div>
+                                    <div className="ItemFooter">{`${item["customName"]}`}</div>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
+                </div>
+            );
+        }
     }
 }
 
