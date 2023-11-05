@@ -30,11 +30,11 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/getAllDocuments', async (req, res) => {
+app.post('/getDocumentsForUser', async (req, res) => {
 
     let conn;
 
-    let ownerId = 1;
+    const { ownerId } = req.body;
 
     try {
         // get a connection from the pool and begin a transaction
@@ -70,8 +70,56 @@ app.get('/getAllDocuments', async (req, res) => {
     }
 })
 
+app.post('/getSharedDocumentsForUser', async (req, res) => {
+
+    let conn;
+
+    const { ownerId } = req.body;
+
+    try {
+        // get a connection from the pool and begin a transaction
+        // using transactions for data integrity
+        conn = await db.getConnection();
+        // await conn.beginTransaction()
+        const [rows, fields] = await conn.query(
+            'SELECT ' +
+            '    d.id, ' +
+            '    d.document, ' +
+            '    d.document_name, ' +
+            '    d.image, ' +
+            '    d.custom_name ' +
+            'FROM ' +
+            '    documents d ' +
+            'INNER JOIN ' +
+            '    documents_users du ON d.id = du.document_id ' +
+            'WHERE ' +
+            '    du.user_id = ?',
+            [ownerId] // This should be the variable holding the owner's ID
+        );
+
+// Convert each image Buffer to a base64 string
+        const modifiedRows = rows.map(row => {
+            if (row.image) {
+                // Assuming 'image' is a Buffer containing the binary image data
+                row.image = row.image.toString('utf-8');
+            }
+            return row;
+        });
+
+        res.json(modifiedRows);
+
+    } catch (err) {
+        // error logging + wait for rollback in case of query failure
+        console.error('An Error occured trying to execute a Database query')
+        //await conn.rollback();
+        res.status(500).send('Error getting documents')
+    } finally {
+        if (conn) conn.release(); // release the connection back to the pool
+
+    }
+})
+
 app.post('/getDocument', async (req, res) => {
-    console.log('/getDocument')
     let conn;
 
     const { documentId } = req.body;
@@ -104,6 +152,41 @@ app.post('/getDocument', async (req, res) => {
     }
 })
 
+app.post('/login', async (req, res) => {
+    let conn;
+
+    const { username, password } = req.body;
+
+    try {
+        // get a connection from the pool and begin a transaction
+        // using transactions for data integrity
+        conn = await db.getConnection();
+        // await conn.beginTransaction()
+        const [rows, fields] = await conn.query(
+            'SELECT id, user_password ' +
+            'FROM docview.users ' +
+            'WHERE user_name = ?',
+            [username]
+        );
+
+        if (rows.length > 0 && rows[0]['user_password'] === password) {
+            res.json({ loginGranted: true, user_id: rows[0]['id'] });
+        } else {
+            // This will handle both no results and incorrect passwords
+            res.json({ loginGranted: false });
+        }
+
+
+    } catch (err) {
+        // error logging + wait for rollback in case of query failure
+        console.error('An Error occurred trying to execute a Database query')
+        //await conn.rollback();
+        res.status(500).send('Error getting documents')
+    } finally {
+        if (conn) conn.release(); // release the connection back to the pool
+
+    }
+})
 
 app.get('/getAllUsers', async (req, res) => {
 

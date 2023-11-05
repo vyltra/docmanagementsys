@@ -194,5 +194,25 @@ body {
   font-weight: bold;
 }
 
+.LoginContainer {
+  width: 100vw;
+  height: 100vh;
+  background-color: #282c34;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.LoginBox {
+  background-color: #22252b;
+  border-radius: 10px;
+  box-shadow: 10px 8px 19px 5px rgba(0, 0, 0, 0.20);
+  height: 30vh;
+  width: 60vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
 

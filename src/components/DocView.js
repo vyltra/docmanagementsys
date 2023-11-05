@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import dummy from '../assets/dummy.png'
 import PDFViewer from "./PDFViewer";
+import UserContext from './UserContext';
 
 
 const Item = styled(Paper)(({ theme  }) => ({
@@ -39,6 +40,8 @@ const items_old = [1, 2, 3, 4, 5, 6];
 
 
 class DocView extends Component {
+
+    static contextType = UserContext;
     constructor(props) {
         super(props);
 
@@ -68,10 +71,28 @@ class DocView extends Component {
     };
 
     componentDidMount() {
-        fetch('http://localhost:3001/getAllDocuments')
-            .then((response) => response.json())
-            .then((data) => this.setState({ items: data }))
-            .catch((error) => console.error('Error: ', error));
+        const { userId } = this.context;
+
+        fetch('http://localhost:3001/getDocumentsForUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ownerId: userId }), // converts state to json and sends in response body
+        })
+            .then(response => { // handle response
+                // Check if the response is successful
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                this.setState({ items: data });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 
     render() {

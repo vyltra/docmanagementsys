@@ -8,16 +8,20 @@ import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 
-
-function Sidebar({setActiveTab}) {
+function Sidebar({setActiveTab, logout}) {
     const [selectedTab, setSelectedTab] = useState(0);
 
     const handleSidebarItemClick = (index) => {
-        setActiveTab(index);
-        setSelectedTab(index);
+        if (index === 99) {
+            logout();
+        } else {
+            setActiveTab(index);
+            setSelectedTab(index);
+        }
     };
     return (
         <div className="Sidebar">
@@ -37,6 +41,10 @@ function Sidebar({setActiveTab}) {
                 <li className={`SidebarRow ${selectedTab === 3 ? 'active' : ''}`} onClick={() => handleSidebarItemClick(3)}>
                     <div className="SidebarIcon"><FileUploadIcon /></div>
                     <div className="SidebarTitle">Upload New File</div>
+                </li>
+                <li className={`SidebarRow ${selectedTab === 99 ? 'active' : ''}`} onClick={() => handleSidebarItemClick(99)}>
+                    <div className="SidebarIcon"><LogoutIcon /></div>
+                    <div className="SidebarTitle">Logout</div>
                 </li>
             </ul>
         </div>
