@@ -183,11 +183,16 @@ body {
   background-color: red;
 }
 
-.PDFViever{
+.PDFViewer{
   height: 100vh;
-  width: 85vw;
   margin: 3vw;
-  background-color: gray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: auto;
+  color: white;
+  font-weight: bold;
 }
+
 
 

@@ -71,7 +71,7 @@ app.get('/getAllDocuments', async (req, res) => {
 })
 
 app.post('/getDocument', async (req, res) => {
-
+    console.log('/getDocument')
     let conn;
 
     const { documentId } = req.body;
@@ -89,14 +89,9 @@ app.post('/getDocument', async (req, res) => {
         );
 
 // Convert each image Buffer to a base64 string
-        const modifiedRows = rows.map(row => {
-            if (row.document) {
-                // Assuming 'image' is a Buffer containing the binary image data
-                row.document = row.document.toString('utf-8');
-            }
-            return row;
-        });
-        res.json(modifiedRows);
+        console.log(rows[0].document)
+        const base64String = rows[0].document.toString('utf-8')
+        res.json({ document: base64String});
 
     } catch (err) {
         // error logging + wait for rollback in case of query failure
