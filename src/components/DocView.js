@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import dummy from '../assets/dummy.png'
 import PDFViewer from "./PDFViewer";
 import UserContext from './UserContext';
-
+import Search from "./Search";
 
 const Item = styled(Paper)(({ theme  }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -49,6 +49,7 @@ class DocView extends Component {
             items: [],
             showPDFViewer: false,
             selectedPDF: null,
+            searchTags: [],
         };
     }
 
@@ -70,32 +71,102 @@ class DocView extends Component {
         this.openPDFViewer(index);
     };
 
+    handleSearchTagsChange = (tags) => {
+        this.setState({ searchTags: tags});
+        this.query();
+    }
+
     componentDidMount() {
+        // initial query
+        this.query()
+    }
+
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        // execute query on state change
+        if (prevProps.activeTab !== this.props.activeTab) {
+            this.query();
+        }
+    }
+
+
+
+    async query() {
         const { userId } = this.context;
 
-        fetch('http://localhost:3001/getDocumentsForUser', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ ownerId: userId }), // converts state to json and sends in response body
-        })
-            .then(response => { // handle response
-                // Check if the response is successful
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                this.setState({ items: data });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        switch (this.props.activeTab) {
+            case 1:
+                fetch('http://localhost:3001/getDocumentsForUser', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ownerId: userId }), // converts state to json and sends in response body
+                })
+                    .then(response => { // handle response
+                        // Check if the response is successful
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        this.setState({ items: data });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                break
+            case 2:
+                fetch('http://localhost:3001/getSharedDocumentsForUser', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ownerId: userId }), // converts state to json and sends in response body
+                })
+                    .then(response => { // handle response
+                        // Check if the response is successful
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        this.setState({ items: data });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                break
+            case 4:
+                fetch('http://localhost:3001/searchDocuments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ searchTags: this.state.searchTags, userId: userId }), // converts state to json and sends in response body
+                })
+                    .then(response => { // handle response
+                        // Check if the response is successful
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        this.setState({ items: data });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                break
+        }
+
+
     }
 
     render() {
+        const { activeTab } = this.props;
         const { items } = this.state;
         if (this.state.showPDFViewer) {
             return(
@@ -106,7 +177,9 @@ class DocView extends Component {
             )
         } else {
             return (
+
                 <div className="DocView">
+                    {activeTab === 4 && <Search onTagsChange={this.handleSearchTagsChange}/>}
                     <Box sx={{flexGrow: 1}}>
                         <Grid container spacing={3}>
                             {items.map((item, index) => (
@@ -117,7 +190,7 @@ class DocView extends Component {
                                         <div className="docName">{`${item["document_name"]}`}</div>
                                         <br/>
                                     </div>
-                                    <div className="ItemFooter">{`${item["customName"]}`}</div>
+                                    <div className="ItemFooter">{`${item["custom_name"]}`}</div>
                                 </Grid>
                             ))}
                         </Grid>

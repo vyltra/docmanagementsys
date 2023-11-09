@@ -46,16 +46,16 @@ class Upload extends Component{
 
     handleTagsChange = (event, values) => {
         // Update the state with the selected tags
-        this.setState({ selectedTags: values });
+        this.setState({ selectedTags: values});
+        console.log(values)
     }
 
     handleCustomNameChange = (event) => {
         this.setState({ customName: event.target.value });
-        console.log(this.state.customName);
+
     }
 
     handleUsersChange = (event, values) => {
-        // Assuming 'values' is an array of user names and 'this.state.userInfo' is an array of objects with 'id' and 'user_name'
         const selectedUserIds = values.map(userName => {
             // Find the user object in the userInfo array by name
             const user = this.state.userInfo.find(u => u.user_name === userName);
@@ -63,7 +63,7 @@ class Upload extends Component{
             return user ? user.id : null;
         }).filter(id => id !== null);
 
-        // Update the state with the selected user IDs
+
         this.setState({ selectedUsers: selectedUserIds });
     }
 
@@ -75,8 +75,9 @@ class Upload extends Component{
         this.setState({ imagePreview: imageData });
     }
 
-    handleSubmit = () => { // If you're using this syntax, don't forget to bind it in the constructor or use an arrow function as shown here.
-
+    handleSubmit = () => {
+        console.log(this.state.selectedTags)
+        console.log(this.state.selectedUsers)
         if (this.state.selectedFile) {
 
             const reader = new FileReader();
@@ -153,6 +154,7 @@ class Upload extends Component{
                                            backgroundColor: '#282c34', // Change the background color here
                                            borderTopLeftRadius: '4px', // Round the top corners
                                            borderTopRightRadius: '4px', // Round the top corners
+                                           width: '43vw',
                                            '&:before': {
                                                borderBottomColor: '#282c34',
                                            },
@@ -160,10 +162,10 @@ class Upload extends Component{
                                                borderBottomColor: '#282c34',
                                            },
                                            '&:hover': {
-                                               backgroundColor: '#282c34', // Change the background color on hover (darker shade for example)
+                                               backgroundColor: '#282c34',
                                            },
                                            '&.Mui-focused': {
-                                               backgroundColor: '#546e7a', // Change the background color on focus
+                                               backgroundColor: '#546e7a',
                                            }
                                        }
                                    }}
@@ -192,7 +194,7 @@ class Upload extends Component{
                                             '& .MuiChip-label': { // Target the label class within the Chip
                                                 color: 'white', // Set the color to white
                                             },
-                                            // Add more styling for the Chip if necessary
+
                                         }}
                                     />
                                 ))

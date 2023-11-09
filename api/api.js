@@ -152,6 +152,55 @@ app.post('/getDocument', async (req, res) => {
     }
 })
 
+app.post('/searchDocuments', async (req, res) => {
+    let conn;
+
+    const { userId, searchTags } = req.body;
+
+    //const searchTagsConverted = searchTags.map(() => '?').join(',');
+    const searchTagsConverted = ['IU', 'Guideline'];
+    const numberOfTags = searchTags.length;
+
+    console.log(userId);
+    console.log(searchTags);
+    console.log(searchTagsConverted);
+    console.log(numberOfTags);
+
+    try {
+        // get a connection from the pool and begin a transaction
+        // using transactions for data integrity
+        conn = await db.getConnection();
+        // await conn.beginTransaction()
+        const [rows, fields] = await conn.query(
+          'SELECT d.* ' +
+          'FROM documents d '+
+          'INNER JOIN documents_tags dt ON dt.document_id = d.id ' +
+          'INNER JOIN tags t ON t.id = dt.tag_id ' +
+          'LEFT JOIN documents_users du ON d.id = du.document_id ' +
+          'WHERE t.tag_name IN ? ' +
+          'AND (d.owner = ? OR du.user_id = ?) ' +
+          'GROUP BY d.id ' +
+          'HAVING COUNT(DISTINCT t.id) = ?;'
+
+            [searchTagsConverted, userId, userId, numberOfTags] // This should be the variable holding the owner's ID
+        );
+
+// Convert each image Buffer to a base64 string
+        console.log(rows[0].document)
+        const base64String = rows[0].document.toString('utf-8')
+        res.json({ document: base64String});
+
+    } catch (err) {
+        // error logging + wait for rollback in case of query failure
+        console.error('An Error occured trying to execute a Database query')
+        //await conn.rollback();
+        res.status(500).send('Error getting documents')
+    } finally {
+        if (conn) conn.release(); // release the connection back to the pool
+
+    }
+})
+
 app.post('/login', async (req, res) => {
     let conn;
 
@@ -249,10 +298,7 @@ app.post('/upload', async (req, res) => {
 
     try {
 
-        const { owner, document, document_name, tags, users, image, custom_name } = req.body;
-
-
-        //console.log(document)
+        const { owner, document, document_name, tags, users, image, customName } = req.body;
 
         //validation code tbd
 
@@ -263,8 +309,8 @@ app.post('/upload', async (req, res) => {
 
         // Insert document
         const [docResult] = await conn.execute(
-            'INSERT INTO docview.documents (owner, document, document_name, image, custom_name) VALUES (?, ?, ?, ?)',
-            [owner, document, document_name, image, custom_name]
+            'INSERT INTO docview.documents (owner, document, document_name, image, custom_name) VALUES (?, ?, ?, ?, ?)',
+            [owner, document, document_name, image, customName]
         );
         const lastDocumentId = docResult.insertId;
 

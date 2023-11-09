@@ -27,9 +27,8 @@ function App() {
             {userId != null &&
                 <div className="App">
                     <RemoveScrollBar />
-
                     <Sidebar setActiveTab={handleActiveTabChange} logout={logout}/>
-                    {(activeTab === 1 || activeTab === 2) && <DocView />}
+                    {(activeTab === 1 || activeTab === 2 || activeTab === 4) && <DocView activeTab={activeTab} />}
                     {activeTab === 3 && <Upload />}
                 </div>
             }

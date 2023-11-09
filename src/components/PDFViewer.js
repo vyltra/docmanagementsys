@@ -36,7 +36,7 @@ class PDFViewer extends Component {
                 return response.json();
             })
             .then((data) => {
-                const docData = data.document; // Convert base64 to Uint8Array
+                const docData = data.document;
                 this.setState({ documentData: { docData } }); // Update state with converted data
             })
             .catch((error) => {

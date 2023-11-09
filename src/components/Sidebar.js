@@ -9,6 +9,7 @@ import ArticleIcon from '@mui/icons-material/Article';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import LogoutIcon from '@mui/icons-material/Logout';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 
@@ -29,6 +30,10 @@ function Sidebar({setActiveTab, logout}) {
                 <li className={`SidebarRow ${selectedTab === 0 ? 'active' : ''}`} onClick={() => handleSidebarItemClick(0)}>
                     <div className="SidebarIcon"><HomeIcon /></div>
                     <div className="SidebarTitle">Home</div>
+                </li>
+                <li className={`SidebarRow ${selectedTab === 4 ? 'active' : ''}`} onClick={() => handleSidebarItemClick(4)}>
+                    <div className="SidebarIcon"><SearchIcon /></div>
+                    <div className="SidebarTitle">Search</div>
                 </li>
                 <li className={`SidebarRow ${selectedTab === 1 ? 'active' : ''}`} onClick={() => handleSidebarItemClick(1)}>
                     <div className="SidebarIcon"><ArticleIcon /></div>
