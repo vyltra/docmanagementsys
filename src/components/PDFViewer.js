@@ -14,6 +14,7 @@ class PDFViewer extends Component {
 
         this.state = {
             documentData: null,
+            documentName: null,
             numPages: null,
             pageNumber: 1,
         };
@@ -37,7 +38,10 @@ class PDFViewer extends Component {
             })
             .then((data) => {
                 const docData = data.document;
-                this.setState({ documentData: { docData } }); // Update state with converted data
+                const docName = data.documentName;
+                this.setState({ documentData: { docData } });
+                this.setState({ documentName: docName });
+                console.log(this.state.documentName);
             })
             .catch((error) => {
                 console.error('Error: ', error);
@@ -46,6 +50,17 @@ class PDFViewer extends Component {
 
     onDocumentLoadSuccess = ({ numPages }) => {
         this.setState({ numPages });
+    };
+
+    downloadPDF = () => {
+        console.log('xxx'+this.state.documentName);
+        const { documentData } = this.state;
+        const link = document.createElement('a');
+        link.href = `data:application/pdf;base64,${documentData.docData}`;
+        link.download = this.state.documentName || 'document.pdf'; // fallback to default name if documentName is not set
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     render() {
@@ -88,6 +103,9 @@ class PDFViewer extends Component {
                                 Close
                             </Button>
                         )}
+                        <Button onClick={this.downloadPDF} variant="contained">
+                            Download
+                        </Button>
                     </Stack>
                 </div>
             </div>

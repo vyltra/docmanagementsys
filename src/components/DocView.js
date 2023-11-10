@@ -72,13 +72,17 @@ class DocView extends Component {
     };
 
     handleSearchTagsChange = (tags) => {
-        this.setState({ searchTags: tags});
-        this.query();
+        this.setState({ searchTags: tags}, () => { //use callback from of setState to avoid timing issue with setState being async
+            this.query();
+        });
     }
 
     componentDidMount() {
         // initial query
-        this.query()
+        // omit if it is a search
+        if (this.props.activeTab !== 4) {
+            this.query();
+        }
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
@@ -168,6 +172,7 @@ class DocView extends Component {
     render() {
         const { activeTab } = this.props;
         const { items } = this.state;
+        console.log(items);
         if (this.state.showPDFViewer) {
             return(
                 <PDFViewer
