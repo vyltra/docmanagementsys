@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete";
 
-
+// this component generates the search field in the DocView component
 
 
 class Search extends Component {
@@ -38,8 +38,6 @@ class Search extends Component {
         // Pass the current state to the parent's `onTagsChange` function
         this.props.onTagsChange(this.state.tags);
     }
-
-
 
 
     render() {
@@ -114,9 +112,6 @@ class Search extends Component {
                     Search
                 </Button>
             </div>
-
-
-
 
         );
     }

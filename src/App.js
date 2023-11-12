@@ -4,9 +4,10 @@ import DocView from "./components/DocView";
 import {RemoveScrollBar} from 'react-remove-scroll-bar';
 import Upload from "./components/Upload";
 import React, { useState } from 'react';
-import UserContext from "./components/UserContext";
 import Login from "./components/Login";
 import {UserProvider} from "./components/UserProvider";
+
+// main App component. Is the entry point for the application
 
 function App() {
     const [activeTab, setActiveTab] = useState(0);

@@ -1,9 +1,5 @@
 import React, {useState} from "react";
 import "../App.css";
-import {SidebarData} from "./SidebarData";
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import Upload from './Upload';
 import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
@@ -11,7 +7,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 
-
+// this component generates the Sidebar
 
 function Sidebar({setActiveTab, logout}) {
     const [selectedTab, setSelectedTab] = useState(0);

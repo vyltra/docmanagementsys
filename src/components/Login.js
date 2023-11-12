@@ -1,13 +1,13 @@
 import React, {Component, useContext} from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button"
-import { UserProvider } from './UserProvider';
-import UserContext from "./UserContext"; // This should be the same UserContext used in UserProvider
+import UserContext from "./UserContext";
 
+// This component generates the Login field
 
 class Login extends Component {
 
-    static contextType = UserContext; // Correctly set the contextType
+    static contextType = UserContext; // use Context to access userId for logged-in user
 
     constructor(props) {
         super(props);
@@ -36,7 +36,7 @@ class Login extends Component {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username: this.state.username, password: this.state.password }), // Assuming the backend expects a JSON with a documentId field
+            body: JSON.stringify({ username: this.state.username, password: this.state.password }),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -81,15 +81,15 @@ class Login extends Component {
                     <TextField id="filled-basic" label="Username" variant="filled" onChange={this.handleUsernameChange}
                                sx={{
                                    '& .MuiInputBase-input': {
-                                       color: 'white', // Text color
+                                       color: 'white',
                                    },
                                    '& .MuiInputLabel-root': {
-                                       color: 'grey', // Label color
+                                       color: 'grey',
                                    },
                                    '& .MuiFilledInput-root': {
-                                       backgroundColor: '#282c34', // Change the background color here
-                                       borderTopLeftRadius: '4px', // Round the top corners
-                                       borderTopRightRadius: '4px', // Round the top corners
+                                       backgroundColor: '#282c34',
+                                       borderTopLeftRadius: '4px',
+                                       borderTopRightRadius: '4px',
                                        width: '20vw',
                                        '&:before': {
                                            borderBottomColor: '#282c34',
@@ -98,10 +98,10 @@ class Login extends Component {
                                            borderBottomColor: '#282c34',
                                        },
                                        '&:hover': {
-                                           backgroundColor: '#282c34', // Change the background color on hover (darker shade for example)
+                                           backgroundColor: '#282c34',
                                        },
                                        '&.Mui-focused': {
-                                           backgroundColor: '#546e7a', // Change the background color on focus
+                                           backgroundColor: '#546e7a',
                                        }
                                    }
                                }}
@@ -118,9 +118,9 @@ class Login extends Component {
                                        color: 'grey', // Label color
                                    },
                                    '& .MuiFilledInput-root': {
-                                       backgroundColor: '#282c34', // Change the background color here
-                                       borderTopLeftRadius: '4px', // Round the top corners
-                                       borderTopRightRadius: '4px', // Round the top corners
+                                       backgroundColor: '#282c34',
+                                       borderTopLeftRadius: '4px',
+                                       borderTopRightRadius: '4px',
                                        width: '20vw',
                                        '&:before': {
                                            borderBottomColor: '#282c34',
@@ -129,10 +129,10 @@ class Login extends Component {
                                            borderBottomColor: '#282c34',
                                        },
                                        '&:hover': {
-                                           backgroundColor: '#282c34', // Change the background color on hover (darker shade for example)
+                                           backgroundColor: '#282c34',
                                        },
                                        '&.Mui-focused': {
-                                           backgroundColor: '#546e7a', // Change the background color on focus
+                                           backgroundColor: '#546e7a',
                                        }
                                    }
                                }}

@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import '../App.css';
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import Button from "@mui/material/Button";
 import { useDropzone } from 'react-dropzone';
+
+// this component creates the dropzone
+// it has been detached from the upload component, so Upload could be reused in the future
+// as an edit interface
 
 const StyledDropzone = (props) => {
     const { getRootProps, getInputProps } = useDropzone({
@@ -37,16 +40,12 @@ class Dropzone extends Component {
                     uploadStatus: 2,
                     filename: file.name
                 });
-
-                // Pass the file as a blob to the parent component
                 this.props.onDrop(file);
             } else {
                 this.setState({ uploadStatus: 1 });
-                // Call the parent component function with null or handle error as needed
                 this.props.onDrop(null);
             }
         } else {
-            // No files were accepted
             this.setState({ uploadStatus: 1 });
             this.props.onDrop(null);
         }

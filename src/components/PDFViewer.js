@@ -6,6 +6,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
+// this component serves as a simple PDF viewer with some buttons for navigation and download
 
 class PDFViewer extends Component {
 
@@ -28,7 +29,7 @@ class PDFViewer extends Component {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ documentId: selectedPDF }), // Assuming the backend expects a JSON with a documentId field
+            body: JSON.stringify({ documentId: selectedPDF }),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -41,7 +42,6 @@ class PDFViewer extends Component {
                 const docName = data.documentName;
                 this.setState({ documentData: { docData } });
                 this.setState({ documentName: docName });
-                console.log(this.state.documentName);
             })
             .catch((error) => {
                 console.error('Error: ', error);
@@ -52,8 +52,8 @@ class PDFViewer extends Component {
         this.setState({ numPages });
     };
 
+    // this method handles downloading the PDF
     downloadPDF = () => {
-        console.log('xxx'+this.state.documentName);
         const { documentData } = this.state;
         const link = document.createElement('a');
         link.href = `data:application/pdf;base64,${documentData.docData}`;
@@ -68,11 +68,10 @@ class PDFViewer extends Component {
 
         const { pageNumber, numPages, documentData } = this.state;
 
-        // Add a loading state to handle the null state before data is fetched
+        // add a loading state to handle the null state before data is fetched
         if (!documentData) {
             return <div>Loading...</div>;
         }
-        // Correct the file prop to use documentData.docData, which holds the base64 string
         return (
             <div className="PDFViewer">
                 <Document

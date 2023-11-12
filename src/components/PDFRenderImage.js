@@ -16,7 +16,7 @@ function PDFRenderImage({ file, onImageReady, desiredDpi = 25 }) {
 
                 getDocument({ data: typedarray }).promise.then(pdf => {
                     pdf.getPage(1).then(function(page) {
-                        // Assume 72 DPI for PDF internal resolution
+                        // assume 72 DPI for PDF internal resolution
                         const internalDpi = 72;
                         const scale = desiredDpi / internalDpi;
                         const viewport = page.getViewport({ scale });

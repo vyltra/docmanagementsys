@@ -1,15 +1,12 @@
 import React, {Component} from "react";
-import Paper from "@mui/material/Paper";
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Dropzone from './Dropzone'
 import PDFRenderImage from "./PDFRenderImage";
 
-
+// this component serves part of the upload interface
 
 
 class Upload extends Component{
@@ -88,11 +85,11 @@ class Upload extends Component{
                     .replace(/^.+,/, '');
 
                 const reqData = {
-                    owner: 1, // You need to set this appropriately
+                    owner: 1,
                     document: base64String,
                     document_name: this.state.selectedFile.name,
-                    tags: this.state.selectedTags, // assuming you want the tag names
-                    users: this.state.selectedUsers, // assuming you want the user names
+                    tags: this.state.selectedTags,
+                    users: this.state.selectedUsers,
                     image: this.state.imagePreview,
                     customName: this.state.customName,
                 };
@@ -103,10 +100,9 @@ class Upload extends Component{
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(reqData), // converts state to json and sends in response body
+                    body: JSON.stringify(reqData),
                 })
                     .then(response => { // handle response
-                        // Check if the response is successful
                         if (!response.ok) {
                             throw new Error('Network response was not ok ' + response.statusText);
                         }
@@ -145,16 +141,15 @@ class Upload extends Component{
                         <TextField id="filled-basic" label="Document Name" variant="filled" onChange={this.handleCustomNameChange}
                                    sx={{
                                        '& .MuiInputBase-input': {
-                                           color: 'white', // Text color
+                                           color: 'white',
                                        },
                                        '& .MuiInputLabel-root': {
-                                           color: 'grey', // Label color
+                                           color: 'grey',
                                        },
                                        '& .MuiFilledInput-root': {
-                                           backgroundColor: '#282c34', // Change the background color here
-                                           borderTopLeftRadius: '4px', // Round the top corners
-                                           borderTopRightRadius: '4px', // Round the top corners
-                                           width: '43vw',
+                                           backgroundColor: '#282c34',
+                                           borderTopLeftRadius: '4px',
+                                           borderTopRightRadius: '4px',
                                            '&:before': {
                                                borderBottomColor: '#282c34',
                                            },
@@ -191,8 +186,8 @@ class Upload extends Component{
                                         label={option}
                                         {...getTagProps({ index })}
                                         sx={{
-                                            '& .MuiChip-label': { // Target the label class within the Chip
-                                                color: 'white', // Set the color to white
+                                            '& .MuiChip-label': {
+                                                color: 'white',
                                             },
 
                                         }}
@@ -207,15 +202,15 @@ class Upload extends Component{
                                     placeholder="Add Tags here"
                                     sx={{
                                         '& .MuiInputBase-input': {
-                                            color: 'white', // Text color
+                                            color: 'white',
                                         },
                                         '& .MuiInputLabel-root': {
-                                            color: 'grey', // Label color
+                                            color: 'grey',
                                         },
                                         '& .MuiFilledInput-root': {
-                                            backgroundColor: '#282c34', // Change the background color here
-                                            borderTopLeftRadius: '4px', // Round the top corners
-                                            borderTopRightRadius: '4px', // Round the top corners
+                                            backgroundColor: '#282c34',
+                                            borderTopLeftRadius: '4px',
+                                            borderTopRightRadius: '4px',
                                             '&:before': {
                                                 borderBottomColor: '#282c34',
                                             },
@@ -223,10 +218,10 @@ class Upload extends Component{
                                                 borderBottomColor: '#282c34',
                                             },
                                             '&:hover': {
-                                                backgroundColor: '#282c34', // Change the background color on hover (darker shade for example)
+                                                backgroundColor: '#282c34',
                                             },
                                             '&.Mui-focused': {
-                                                backgroundColor: '#546e7a', // Change the background color on focus
+                                                backgroundColor: '#546e7a',
                                             }
                                         }
                                     }}
@@ -251,10 +246,9 @@ class Upload extends Component{
                                         label={option}
                                         {...getTagProps({ index })}
                                         sx={{
-                                            '& .MuiChip-label': { // Target the label class within the Chip
-                                                color: 'white', // Set the color to white
+                                            '& .MuiChip-label': {
+                                                color: 'white',
                                             },
-                                            // Add more styling for the Chip if necessary
                                         }}
                                     />
                                 ))
@@ -267,15 +261,15 @@ class Upload extends Component{
                                     placeholder="Add Users here"
                                     sx={{
                                         '& .MuiInputBase-input': {
-                                            color: 'white', // Text color
+                                            color: 'white',
                                         },
                                         '& .MuiInputLabel-root': {
-                                            color: 'grey', // Label color
+                                            color: 'grey',
                                         },
                                         '& .MuiFilledInput-root': {
-                                            backgroundColor: '#282c34', // Change the background color here
-                                            borderTopLeftRadius: '4px', // Round the top corners
-                                            borderTopRightRadius: '4px', // Round the top corners
+                                            backgroundColor: '#282c34',
+                                            borderTopLeftRadius: '4px',
+                                            borderTopRightRadius: '4px',
                                             '&:before': {
                                                 borderBottomColor: '#282c34',
                                             },
@@ -283,10 +277,10 @@ class Upload extends Component{
                                                 borderBottomColor: '#282c34',
                                             },
                                             '&:hover': {
-                                                backgroundColor: '#282c34', // Change the background color on hover (darker shade for example)
+                                                backgroundColor: '#282c34',
                                             },
                                             '&.Mui-focused': {
-                                                backgroundColor: '#546e7a', // Change the background color on focus
+                                                backgroundColor: '#546e7a',
                                             }
                                         }
                                     }}
@@ -295,7 +289,7 @@ class Upload extends Component{
                         />
 
                     </div>
-
+                    <br/>
                     <Button variant="contained" size="large" onClick={this.handleSubmit}>
                         Submit
                     </Button>
@@ -303,11 +297,7 @@ class Upload extends Component{
                 </div>
             </div>
         )
-
-
     }
-
-
 }
 
 export default Upload
