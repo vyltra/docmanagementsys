@@ -11528,7 +11528,7 @@ class PartialEvaluator {
       }
       if (charCode in encoding && widthsByGlyphName[encoding[charCode]]) {
         widths[charCode] = widthsByGlyphName[encoding[charCode]];
-        continue;
+
       }
     }
     return widths;
@@ -12967,7 +12967,7 @@ async function parseCMap(cMap, lexer, fetchBuiltInCMap, useCMap) {
         throw ex;
       }
       (0, _util.warn)("Invalid cMap data: " + ex);
-      continue;
+
     }
   }
   if (!useCMap && embeddedUseCMap) {
@@ -14193,7 +14193,7 @@ class Lexer {
         break;
       } else if (specialChars[ch] === 1) {
         ch = this.nextChar();
-        continue;
+
       } else {
         if (isFirstHex) {
           firstDigit = toHexDigit(ch);
@@ -44102,7 +44102,7 @@ class StructTreePage {
         const kidElement = kid.type === StructElementType.ELEMENT ? kid.parentNode : null;
         if (kidElement) {
           nodeToSerializable(kidElement, obj, level + 1);
-          continue;
+
         } else if (kid.type === StructElementType.PAGE_CONTENT || kid.type === StructElementType.STREAM_CONTENT) {
           obj.children.push({
             type: "content",

@@ -6,6 +6,7 @@ import Upload from "./components/Upload";
 import React, { useState } from 'react';
 import Login from "./components/Login";
 import {UserProvider} from "./components/UserProvider";
+import Home from "./components/Home";
 
 // main App component. Is the entry point for the application
 
@@ -29,6 +30,7 @@ function App() {
                 <div className="App">
                     <RemoveScrollBar />
                     <Sidebar setActiveTab={handleActiveTabChange} logout={logout}/>
+                    {activeTab === 0 && <Home />}
                     {(activeTab === 1 || activeTab === 2 || activeTab === 4) && <DocView activeTab={activeTab} />}
                     {activeTab === 3 && <Upload />}
                 </div>

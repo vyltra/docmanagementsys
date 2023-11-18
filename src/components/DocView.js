@@ -2,41 +2,9 @@ import React, {Component} from "react";
 import "../App.css";
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
-import dummy from '../assets/dummy.png'
 import PDFViewer from "./PDFViewer";
 import UserContext from './UserContext';
 import Search from "./Search";
-
-const Item = styled(Paper)(({ theme  }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
-
-
-function Base64Image({ base64 }) {
-    if (!base64) {
-        return <p>No image provided</p>;
-    }
-
-    const src = `data:image/png;base64,${base64}`;
-    return (
-        <img
-            src={src}
-            alt="Base64 Encoded"
-            onError={() => console.error("Error loading base64 image")}
-        />
-    );
-}
-
-
-
-
-const items_old = [1, 2, 3, 4, 5, 6];
 
 
 class DocView extends Component {
