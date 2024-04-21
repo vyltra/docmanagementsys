@@ -4,8 +4,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { useDropzone } from 'react-dropzone';
 
 // this component creates the dropzone
-// it has been detached from the upload component, so Upload could be reused in the future
-// as an edit interface
+// it has been detached from the upload component, so Upload can be reused in the future as an edit interface
 
 const StyledDropzone = (props) => {
     const { getRootProps, getInputProps } = useDropzone({

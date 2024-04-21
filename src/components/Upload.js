@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Dropzone from './Dropzone'
 import PDFRenderImage from "./PDFRenderImage";
 
-// this component serves part of the upload interface
+// this component serves part of the upload interface (requires Dropzone.js)
 
 
 class Upload extends Component{
@@ -26,6 +26,7 @@ class Upload extends Component{
 
     }
 
+    // execute API calls to get users and tags for input fields
     componentDidMount() {
         fetch('http://localhost:3001/getAllUsers')
             .then((response) => response.json())
@@ -44,7 +45,6 @@ class Upload extends Component{
     handleTagsChange = (event, values) => {
         // Update the state with the selected tags
         this.setState({ selectedTags: values});
-        console.log(values)
     }
 
     handleCustomNameChange = (event) => {
@@ -73,8 +73,6 @@ class Upload extends Component{
     }
 
     handleSubmit = () => {
-        console.log(this.state.selectedTags)
-        console.log(this.state.selectedUsers)
         if (this.state.selectedFile) {
 
             const reader = new FileReader();
@@ -94,7 +92,6 @@ class Upload extends Component{
                     customName: this.state.customName,
                 };
 
-                // Use fetch to send a POST request
                 fetch('http://localhost:3001/upload', {
                     method: 'POST',
                     headers: {
@@ -109,7 +106,6 @@ class Upload extends Component{
                         return response.json();
                     })
                     .then(data => {
-                        console.log('Success:', data);
                     })
                     .catch(error => {
                         console.error('Error:', error);

@@ -19,17 +19,18 @@ class Login extends Component {
         };
     }
 
+    // handler to change the username state
     handleUsernameChange = (event) => {
         this.setState({ username: event.target.value });
     }
 
+    // handler to change the password state
     handlePasswordChange = (event) => {
         this.setState({ password: event.target.value });
     }
 
+    // handler to execute API call to check login credentials
     handleSubmit = () => {
-        console.log(this.state.username);
-        console.log(this.state.password);
 
         fetch('http://localhost:3001/login', {
             method: 'POST', // or 'PUT'
@@ -45,7 +46,6 @@ class Login extends Component {
                 return response.json();
             })
             .then((data) => {
-                console.log(data.loginGranted)
                 if (data.loginGranted){
                     // Access the setUserId function from the context
                     this.context.setUserId(data.user_id);

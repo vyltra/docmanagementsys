@@ -65,7 +65,6 @@ class PDFViewer extends Component {
 
     render() {
 
-
         const { pageNumber, numPages, documentData } = this.state;
 
         // add a loading state to handle the null state before data is fetched

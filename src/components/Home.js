@@ -1,5 +1,7 @@
 import React from "react";
 
+// Shows the home screen. Acts as a placeholder - functionality can be implemented in the future
+
 function Home () {
     return (
         <div className="Home">

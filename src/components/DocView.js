@@ -21,6 +21,7 @@ class DocView extends Component {
         };
     }
 
+    // opens the PDF viewer with a selected PDF
     openPDFViewer = (pdf) => {
         this.setState({
             showPDFViewer: true,
@@ -28,6 +29,7 @@ class DocView extends Component {
         });
     };
 
+    // closes the PDF viewer
     closePDFViewer = () => {
         this.setState({
             showPDFViewer: false,
@@ -35,33 +37,35 @@ class DocView extends Component {
         });
     };
 
+    // handler for clicking on a Document - currently only calls the PDF viewer
+    // kept in separate handler for extensibility
     handleDocumentClick = (index) => {
         this.openPDFViewer(index);
     };
 
+    // handler for Search Tags. Calls for an API query when search Tags change
     handleSearchTagsChange = (tags) => {
         this.setState({ searchTags: tags}, () => { //use callback from of setState to avoid timing issue with setState being async
             this.query();
         });
     }
 
+    // initial query
+    // omit if it is a search
     componentDidMount() {
-        // initial query
-        // omit if it is a search
         if (this.props.activeTab !== 4) {
             this.query();
         }
     }
 
+    // execute query on state change
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-        // execute query on state change
         if (prevProps.activeTab !== this.props.activeTab) {
             this.query();
         }
     }
 
-
-
+    // API call to show documents. Switches cases based on which Tab is selected
     async query() {
         const { userId } = this.context;
 
@@ -140,7 +144,6 @@ class DocView extends Component {
     render() {
         const { activeTab } = this.props;
         const { items } = this.state;
-        console.log(items);
         if (this.state.showPDFViewer) {
             return(
                 <PDFViewer

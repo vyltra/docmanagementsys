@@ -11,18 +11,24 @@ import Home from "./components/Home";
 // main App component. Is the entry point for the application
 
 function App() {
+    // activeTab = selected Tab in the Sidebar, stored in App component to act as a global variable
+    // userId = ID of the currently logged-in user, stored in App component to act as a global variable
     const [activeTab, setActiveTab] = useState(0);
     const [userId, setUserId] = useState(null);
 
+    // handler for changing Tabs in the Sidebar
     const handleActiveTabChange = (index) => {
         setActiveTab(index);
     };
 
+    // handler for logout
     const logout = () => {
       setUserId(null);
       setActiveTab(0)
     };
 
+    // return uses conditional rendering to show the requested component in the main window
+    // requested component is identified by the selected active tab ID
     return (
         <UserProvider userId={userId} setUserId={setUserId}>
             {userId === null && <Login />}
