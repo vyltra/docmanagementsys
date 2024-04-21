@@ -5,6 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Dropzone from './Dropzone'
 import PDFRenderImage from "./PDFRenderImage";
+import {Typography} from "@mui/material";
 
 // this component serves part of the upload interface (requires Dropzone.js)
 
@@ -22,6 +23,7 @@ class Upload extends Component{
             userTags: [],
             imagePreview: [],
             customName: null,
+            feedbackIndicator: null,
         };
 
     }
@@ -103,12 +105,14 @@ class Upload extends Component{
                         if (!response.ok) {
                             throw new Error('Network response was not ok ' + response.statusText);
                         }
+                        this.setState({feedbackIndicator: 'Upload successful'})
                         return response.json();
                     })
                     .then(data => {
                     })
                     .catch(error => {
                         console.error('Error:', error);
+                        this.setState({feedbackIndicator: 'An Error occured'})
                     });
             };
 
@@ -289,6 +293,10 @@ class Upload extends Component{
                     <Button variant="contained" size="large" onClick={this.handleSubmit}>
                         Submit
                     </Button>
+
+                    <Typography variant="h4" sx={{color: "white"}}>
+                        {this.state.feedbackIndicator}
+                    </Typography>
 
                 </div>
             </div>
