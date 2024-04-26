@@ -1,0 +1,7 @@
+INSERT INTO users (user_name, user_password) VALUES
+('sampleuser', '1234'),
+('testuser', '1234'),
+('Frank Smitz', '1111'),
+('Colin Free', '1111'),
+('Debra Gordon', '1111'),
+

@@ -1,0 +1,50 @@
+create table documents
+(
+    id            int auto_increment
+        primary key,
+    owner         int        null,
+    document      mediumblob null,
+    document_name char(100)  not null,
+    image         mediumblob null,
+    custom_name   char(100)  null
+);
+
+create table tags
+(
+    id       int auto_increment
+        primary key,
+    tag_name char(100) null
+);
+
+create table documents_tags
+(
+    id          int auto_increment
+        primary key,
+    document_id int null,
+    tag_id      int null,
+    constraint documents_tags_documents_id_fk
+        foreign key (document_id) references documents (id),
+    constraint documents_tags_tags_id_fk
+        foreign key (tag_id) references tags (id)
+);
+
+create table users
+(
+    id            int auto_increment
+        primary key,
+    user_name     char(100) null,
+    user_password char(100) null
+);
+
+create table documents_users
+(
+    id          int auto_increment
+        primary key,
+    user_id     int null,
+    document_id int null,
+    constraint documents_users_documents_id_fk
+        foreign key (document_id) references documents (id),
+    constraint documents_users_users_id_fk
+        foreign key (user_id) references users (id)
+);
+
