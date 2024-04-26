@@ -5,7 +5,7 @@ INSERT INTO tags (tag_name) VALUES
 ('Guideline'),
 ('Confidential'),
 ('TODO'),
-('DLBCSPJWD01'),
+('DLBCSPJWD01');
 
 
 

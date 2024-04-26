@@ -3,5 +3,5 @@ INSERT INTO users (user_name, user_password) VALUES
 ('testuser', '1234'),
 ('Frank Smitz', '1111'),
 ('Colin Free', '1111'),
-('Debra Gordon', '1111'),
+('Debra Gordon', '1111');
 
